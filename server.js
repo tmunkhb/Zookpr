@@ -53,19 +53,40 @@ function filterByQuery(query, animalsArray) {
 
 
 
-
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+  }
 
 
 // get() method requires 2 arguments. The first is a string that describes the route the client will have to fetch from. 
 // The second is a callback function that will execute every time that route is accessed with a GET request.
 app.get('/api/animals', (req, res) => {
-    let results = animals;
+    let result = animals;
     if (req.query) {
-        results = filterByQuery(req.query, results);
+        results = filterByQuery(req.query, result);
     }
-    res.json(results);
+    res.json(result);
+});
+
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    } else {
+        res.send(400);
+    }
 });
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
+
+
+
+
+
+
+
+//req.query is multifaceted, often combining multiple parameters,
+//req.param is specific to a single property, often intended to retrieve a single record.
